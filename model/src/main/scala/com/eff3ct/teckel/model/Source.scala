@@ -95,4 +95,20 @@ object Source {
 
   case class Flatten(assetRef: AssetRef, separator: Option[String], explodeArrays: Option[Boolean])
       extends Transformation
+
+  case class Pivot(
+      assetRef: AssetRef,
+      groupBy: NonEmptyList[Column],
+      pivotColumn: Column,
+      values: Option[List[String]],
+      aggregate: NonEmptyList[Column]
+  ) extends Transformation
+
+  case class Unpivot(
+      assetRef: AssetRef,
+      ids: NonEmptyList[Column],
+      values: NonEmptyList[Column],
+      variableColumn: Column,
+      valueColumn: Column
+  ) extends Transformation
 }

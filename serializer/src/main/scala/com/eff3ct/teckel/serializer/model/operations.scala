@@ -53,6 +53,8 @@ object operations {
       case e: ExceptOp        => e.asJson
       case w: WindowOp        => w.asJson
       case f: FlattenOp       => f.asJson
+      case p: PivotOp         => p.asJson
+      case u: UnpivotOp       => u.asJson
       case s: SplitOp         => s.asJson
     }
 
@@ -75,6 +77,8 @@ object operations {
       Decoder[ExceptOp].widen,
       Decoder[WindowOp].widen,
       Decoder[FlattenOp].widen,
+      Decoder[PivotOp].widen,
+      Decoder[UnpivotOp].widen,
       Decoder[SplitOp].widen
     ).reduceLeft(_ or _)
 
@@ -113,6 +117,22 @@ object operations {
 
   case class FlattenOp(from: String, separator: Option[String], explodeArrays: Option[Boolean])
       extends Operation
+
+  case class PivotOp(
+      from: String,
+      groupBy: NonEmptyList[String],
+      pivotColumn: String,
+      values: Option[List[String]],
+      agg: NonEmptyList[String]
+  ) extends Operation
+
+  case class UnpivotOp(
+      from: String,
+      ids: NonEmptyList[String],
+      values: NonEmptyList[String],
+      variableColumn: String,
+      valueColumn: String
+  ) extends Operation
 
   case class SplitOp(from: String, condition: String, pass: String, fail: String) extends Operation
 

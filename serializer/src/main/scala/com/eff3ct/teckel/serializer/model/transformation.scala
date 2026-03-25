@@ -52,6 +52,8 @@ object transformation {
       case e: ExceptT       => e.asJson
       case w: WindowT       => w.asJson
       case f: FlattenT      => f.asJson
+      case p: PivotT        => p.asJson
+      case u: UnpivotT      => u.asJson
       case s: SplitT        => s.asJson
     }
 
@@ -74,6 +76,8 @@ object transformation {
       Decoder[ExceptT].widen,
       Decoder[WindowT].widen,
       Decoder[FlattenT].widen,
+      Decoder[PivotT].widen,
+      Decoder[UnpivotT].widen,
       Decoder[SplitT].widen
     ).reduceLeft(_ or _)
 
@@ -98,6 +102,10 @@ object transformation {
   case class WindowT(name: String, window: WindowOp) extends Transformation
 
   case class FlattenT(name: String, flatten: FlattenOp) extends Transformation
+
+  case class PivotT(name: String, pivot: PivotOp) extends Transformation
+
+  case class UnpivotT(name: String, unpivot: UnpivotOp) extends Transformation
 
   case class SplitT(name: String, split: SplitOp) extends Transformation
 
